@@ -1,7 +1,9 @@
 const express=require("express");
 const bodyParser=require("body-parser");
 const app =express();
-const {PORT}=require('./config/serverConfig')
+const {PORT}=require('./config/serverConfig');
+const {sendBasicEmail}=require('./services/email-service')
+
 const setupAndStartServer=()=>
 {
 
@@ -11,6 +13,14 @@ app.use(bodyParser,bodyParser.urlencoded({extended:true}));
 app.listen(PORT,()=>
 {
 console.log(`Server started at port ${PORT}`);
+
+sendBasicEmail(
+    'yashasvikaaap.com',
+    'balwaniharsh1001@gmail.com',
+    'This is a testing mail',
+    'Hey,Just checking it is working fine or not'
+
+)
 });
 }
 
