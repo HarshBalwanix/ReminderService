@@ -2,15 +2,16 @@ const express=require("express");
 const bodyParser=require("body-parser");
 const app =express();
 const {PORT}=require('./config/serverConfig');
+const {createChannel}=require('./utils/messageQueue')
 // const {sendBasicEmail}=require('./services/email-service')
 const jobs=require('../src/utils/job');
-const setupAndStartServer=()=>
+const setupAndStartServer=async ()=>
 {
 
 app.use(bodyParser.json());
 app.use(bodyParser,bodyParser.urlencoded({extended:true}));
  
-app
+const channel=await  createChannel();
 
 app.listen(PORT,()=>
 {
