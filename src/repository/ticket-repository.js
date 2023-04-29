@@ -1,5 +1,5 @@
-const {NotificationTicket}=require('../models/index');
-
+const {NotificationTicket, sequelize}=require('../models/index');
+const {Op}=require("sequelize");
 class TicketRepository{
     async getAll()
     {

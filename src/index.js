@@ -2,31 +2,27 @@ const express=require("express");
 const bodyParser=require("body-parser");
 const app =express();
 const {PORT}=require('./config/serverConfig');
-const {createChannel}=require('./utils/messageQueue')
-// const {sendBasicEmail}=require('./services/email-service')
+
 const jobs=require('../src/utils/job');
+const {susbscribeMessage,createChannel}= require('./utils/messageQueue');
+const TicketController=require('./controllers/ticket-controller'); 
+const {REMINDER_BINDING_KEY}=require('./config/serverConfig');
+const EmailService=require('./services/email-service');
 const setupAndStartServer=async ()=>
 {
-
+const app =express();
 app.use(bodyParser.json());
 app.use(bodyParser,bodyParser.urlencoded({extended:true}));
  
-const channel=await  createChannel();
+app.post('api/v1/tickets',TicketController.create);
+
+const channel=await createChannel();
+susbscribeMessage(channel,EmailService.subscribeEvents,REMINDER_BINDING_KEY);
 
 app.listen(PORT,()=>
 {
 console.log(`Server started at port ${PORT}`);
 jobs();
-// sendBasicEmail(
-//     'support@gmail.com',
-//     'balwaniharsh1001@gmail.com',
-//     'This is a testing mail',
-//     'Hey,Just checking it is working fine or not'
-
-// )
-// cron.schedule('',()=>{
-//     console.log("");
-// });
 });
 }
 
